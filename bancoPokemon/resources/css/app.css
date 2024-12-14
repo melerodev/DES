@@ -1,0 +1,108 @@
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-toggler {
+    background-color: white;
+    border: none;
+    padding: 0.5rem;
+}
+
+.navbar-links ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-links ul li {
+    margin-right: 1rem;
+}
+
+.navbar-links ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.github-link {
+    color: white;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Estilo del jumbotron */
+.jumbotron {
+    background-color: #007bff;
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.jumbotron .container h4 {
+    font-size: 2rem;
+}
+
+/* Estilo de los mensajes de alerta */
+.alert {
+    margin-top: 1rem;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Estilo del pie de página */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Estilo para el contenido */
+.container {
+    margin-top: 2rem;
+}
+
+.row {
+    margin-bottom: 1.5rem;
+}
+
+/* Resposividad */
+@media (max-width: 768px) {
+    .navbar-links ul {
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+    .navbar-links ul li {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
