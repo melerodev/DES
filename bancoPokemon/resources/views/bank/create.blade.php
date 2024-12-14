@@ -2,7 +2,7 @@
 
 @section('basecontent')
 
-    <form action="{{url('pokemon')}}" method="post">
+    <form action="{{url('pokemon')}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="name">Nombre</label>
@@ -42,6 +42,10 @@
         <div class="form-group">
             <label for="evolution">Evoluciones</label>
             <input value="{{old('evolution')}}" required type="number" step="1" class="form-control" id="evolution" name="evolution" placeholder="número de evoluciones">
+        </div>
+        <div class="form-group">
+            <label for="image">Imagen</label>
+            <input type="file" class="form-control" id="image" name="image">
         </div>
         <button type="submit" class="btn btn-primary">añadir</button>
     </form>

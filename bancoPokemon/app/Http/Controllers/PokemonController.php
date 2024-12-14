@@ -43,15 +43,16 @@ class PokemonController extends Controller
             'height' => 'required|numeric|gte:0|lte:100000',
             'type' => 'required|max:20|min:2',
             'evolution' => 'required|numeric|gte:0|lte:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $object = new Pokemon($request->all());
-        try {
-            //$result = $object->save();
-            $object = Pokemon::create($request->all());
-            return redirect('pokemon')->with(['message' => 'El Pokémon ha sido creado.']);
-        } catch(\Exception $e) {
-            return back()->withInput()->withErrors(['message' => 'El Pokémon no ha sido creado.']);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
         }
+
+        $object = Pokemon::create($validated);
+        return redirect('pokemon')->with(['message' => 'El Pokémon ha sido creado.']);
     }
 
     function update(Request $request, Pokemon $pokemon) {
@@ -61,13 +62,16 @@ class PokemonController extends Controller
             'height' => 'required|numeric|gte:0|lte:100000',
             'type' => 'required|max:20|min:2',
             'evolution' => 'required|numeric|gte:0|lte:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        try {
-            $result = $pokemon->update($request->all());
-            return redirect('pokemon')->with(['message' => 'El Pokémon ha sido actualizado.']);
-        } catch(\Exception $e) {
-            return back()->withInput()->withErrors(['message' => 'El Pokémon NO ha sido actualizado.']);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
         }
+
+        $pokemon->update($validated);
+        return redirect('pokemon')->with(['message' => 'El Pokémon ha sido actualizado.']);
     }
     
 }

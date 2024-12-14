@@ -13,6 +13,7 @@
                 <th>Altura (m)</th>
                 <th>Tipo</th>
                 <th>Evolución</th>
+                <th>Imagen</th>
                 @if(session('user'))
                     <th>Borrar</th>
                     <th>Editar</th>
@@ -29,6 +30,11 @@
                     <td>{{$pokemon->height}}</td>
                     <td>{{$pokemon->type}}</td>
                     <td>{{$pokemon->evolution}}</td>
+                    <td>
+                        @if($pokemon->image)
+                            <img src="{{ asset('storage/' . $pokemon->image) }}" alt="Imagen de {{$pokemon->name}}" width="50">
+                        @endif
+                    </td>
                     @if(session('user'))
                     <td><a href="#" data-href="{{ url('pokemon/' . $pokemon->id )}}" class="borrar">borrar</a></td>
                     <!-- Para hacerlo con botón, sin script.js y sin confirmación de borrado. No recomendable

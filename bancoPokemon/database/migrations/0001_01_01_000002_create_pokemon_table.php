@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('height');
             $table->string('type');
             $table->integer('evolution');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
