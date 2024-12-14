@@ -32,7 +32,7 @@
                     <td>{{$pokemon->evolution}}</td>
                     <td>
                         @if($pokemon->image)
-                            <img src="{{ asset('storage/' . $pokemon->image) }}" alt="Imagen de {{$pokemon->name}}" width="50">
+                            <img src="{{ asset('storage/' . $pokemon->image) }}" alt="Imagen de {{$pokemon->name}}" width="50" height="50">
                         @endif
                     </td>
                     @if(session('user'))
