@@ -12,9 +12,9 @@ if(isset($_SESSION['user'])) {
 
 try {
     $connection = new PDO(
-        'mysql:host=localhost;dbname=pokedex',
-        'pokemon_master',
-        'pokepass',
+        'mysql:host=localhost;dbname=pokemon',
+        'newuser',
+        'root',
         array(
             PDO::ATTR_PERSISTENT => true,
             PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8'

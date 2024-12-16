@@ -2,10 +2,10 @@
 
 try {
     $connection = new \PDO(
-      'mysql:host=localhost;dbname=pokedex',
-      'pokemon_master',
-      'pokepass',
-      array(
+    'mysql:host=localhost;dbname=pokemon',
+    'newuser',
+    'root',
+    array(
         PDO::ATTR_PERSISTENT => true,
         PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8')
     );
@@ -88,12 +88,12 @@ $connection = null;
                     <div class="form-group">
                         Weight:
                         <?= $fila['weight'] ?>
-                         kg
+                        kg
                     </div>
                     <div class="form-group">
                         Height:
                         <?= $fila['height'] ?>
-                         m
+                        m
                     </div>
                     <div class="form-group">
                         Type:
