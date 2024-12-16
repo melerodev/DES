@@ -66,25 +66,47 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 # 1. Logearse
+
 Le damos al botón de `Log in`.
+
 ![alt text](img/image.png)
+
 # 2. Crear un pokemon
+
 Vamos a Pokémon y le damos a `añadir pokémon`.
+
 ![alt text](img/image-1.png)
+
 Rellenamos los campos y tras eso le damos a `añadir`.
+
 ![alt text](img/image-3.png)
+
 # 3. Editar
+
 Le damos al botón `editar`.
+
 ![alt text](img/image-4.png)
+
 Y hacamos los cambios que queremos y le damos a `editar`.
+
 ![alt text](img/image-5.png)
+
 # 4. Ver a un pokémon
+
 Le damos a `ver`.
+
 ![alt text](img/image-6.png)
+
 Y podremos ver sus valores.
+
 ![alt text](img/image-7.png)
+
 # 5. Eliminar un pokemon
+
 Le damos al botón `borrar`.
+
 ![alt text](img/image-8.png)
+
 Y después le damos a `Aceptar`.
+
 ![alt text](img/image-9.png)
