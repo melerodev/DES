@@ -26,7 +26,7 @@ session_start();
                 </ul>
             </div>
             <div>
-                <a href="https://github.com/melerodev/DES/tree/main/bancoPokemonCRUD" class="text-white" target="_blank">
+                <a href="https://github.com/melerodev/DES/tree/main/BancoPokemon-CRUD" class="text-white" target="_blank">
                     <i class="fa-brands fa-github"></i> Code
                 </a>
             </div>
