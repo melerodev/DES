@@ -37,15 +37,15 @@ class ProfileController extends BaseController
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
         ]);
 
-        // Check if email is being changed
+        // comprobar si el email ha cambiado
         if ($validated['email'] !== $user->email) {
-            $validated['email_verified_at'] = null; // Reset verification
+            $validated['email_verified_at'] = null; // resetear la verificación
             $user->update($validated);
-            $user->sendEmailVerificationNotification(); // Send new verification email
+            $user->sendEmailVerificationNotification(); // enviar correo de verificación
             return back()->with('status', 'Profile updated successfully. Please verify your new email address.')->widtherrors(['status' => 'Ya no estás verificado.']);
         }
 
-        // Only name is being updated
+        // solo actualizar el nombre
         $user->update($validated);
         return back()->with('status', 'Profile updated successfully!');
     }
@@ -78,11 +78,6 @@ class ProfileController extends BaseController
         // si el rol es admin o superadmin y el usuario autenticado no es superadmin, no se puede borrar
         if (($role === 'admin' || $role === 'superadmin') && $user->role !== 'superadmin') {
             return redirect()->route('usermanager')->with('error', 'No tienes permisos para borrar este usuario.');
-        }
-
-        // si el rol es superadmin y el usuario autenticado no es superadmin, no se puede borrar
-        if ($role === 'superadmin' && $user->role !== 'superadmin') {
-            return redirect()->route('usermanager')->with('error', 'No puedes borrar un usuario con rol de superadministrador.');
         }
 
         if ($user->id === User::findOrFail($id)->id) {

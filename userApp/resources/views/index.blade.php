@@ -15,8 +15,8 @@
                     <br>
                     <a href="{{ route('home') }}">Logueado</a>
                     <br>
-                    @if(Auth::user() && Auth::user()->role == 'admin' or Auth::user()->role == 'superadmin')
-                        <a href="{{ route('usermanager') }}">User Manager</a>
+                    @if(Auth::user() && Auth::user()->role == 'admin' or Auth::user() && Auth::user()->role == 'superadmin')
+                        <a href="{{ route('usermanager') }}">Administrar usuarios</a>
                     @endif
                 </div>
             </div>
