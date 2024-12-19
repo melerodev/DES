@@ -64,3 +64,37 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+# Registrarse
+Ir a la siguiente ruta `https://php-amz.sytes.net/laraveles/userApp/public/register` y poner nuestros datos.
+![alt text](img/image.png)
+
+Nos enviará un correo de verificación y le daremos al botón `Verify Email Adress`
+![alt text](img/image-1.png)
+
+# Editar tu perfil
+Iremos a la siguiente ruta `https://php-amz.sytes.net/laraveles/userApp/public/home` y ahí haremos los que necesitemos hacer, ya sea modificar la contraseña, correo o nombre de usuario.
+![alt text](img/image-2.png)
+
+# Gestionar usuarios
+Nos logearemos con las siguientes credenciales:
+![alt text](img/image-3.png)
+
+Iremos a la siguiente ruta `https://php-amz.sytes.net/laraveles/userApp/public/usermanager` y aqui tendrémos que tener en cuanta varias cosas.
+ - No podremos eliminar ni editar usuarios de nuestro mismo rol (el caso de superadmin solo hay uno así que no hay validación).
+ - Podremos borrar usuarios de un rol inferior.
+ - Podremos borrar cualquier tipo de usuario siendo `superadmin`.
+ - No podremos borrarnos a nosotros mismos.
+
+## Editar un usuario
+Le daremos al botón que dice `Editar`
+![alt text](img/image-4.png)
+Y aquí editaremos los datos que necesitemos.
+![alt text](img/image-5.png)
+
+## Eliminar usuario
+Le daremos al botón que dice `Eliminar`.
+![alt text](img/image-6.png)
+Y después de eso le daremos a `Aceptar`.
+![alt text](img/image-7.png)
