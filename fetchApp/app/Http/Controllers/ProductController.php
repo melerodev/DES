@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    function fetch() {
+        return view('fetch');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -26,17 +29,33 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'name'  => 'required|unique:product|max:100|min:2',
+            'price' => 'required|numeric|gte:0|lte:100000',
+        ]);
+        $object = new Product($request->all());
+        try {
+            $result = $object->save();
+        } catch(\Exception $e) {
+            $result = false;
+        }
+        return response()->json(['result' => $result]);
     }
-
+    
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::find($id);
+        $message = '';
+        
+        if ($product === null) {
+            $message = 'Product not found';
+        }
+
+        return response()->json(['message'  => $message, 'product' => $product]);
     }
 
     /**
