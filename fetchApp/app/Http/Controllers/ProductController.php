@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -30,10 +31,21 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        $validated = $request->validate([
+        $validated = Validator::make($request->all([
             'name'  => 'required|unique:product|max:100|min:2',
             'price' => 'required|numeric|gte:0|lte:100000',
-        ]);
+        ]));
+
+        if($validated->passes()) {
+            $object = new Product($request->all());
+            try {
+                $result = $object->save();
+            } catch(\Exception $e) {
+                $result = false;
+            }
+        } else {
+            $result = false;
+        }
         $object = new Product($request->all());
         try {
             $result = $object->save();
