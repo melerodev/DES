@@ -23,7 +23,7 @@
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    "name": "cebolla",
+                    "name": "qwe",
                     "price": 100
                 })
             })
