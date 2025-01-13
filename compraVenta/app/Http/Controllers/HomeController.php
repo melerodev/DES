@@ -28,7 +28,12 @@ class HomeController extends BaseController
      */
     public function home()
     {
-        return view('home');
+        return view('index');
+    }
+
+    public function crearProducto()
+    {
+        return view('createnewproduct');
     }
 
     function index() {
