@@ -8,15 +8,24 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    function main() {
+        return view('main');
+    }
+    
     function fetch() {
         return view('fetch');
     }
+
+    function modal() {
+        return view('modal');
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(['products' => Product::orderBy('name')->get()]);
+        return response()->json(['product' => Product::orderBy('name')->get()]);
     }
 
     /**
@@ -41,12 +50,12 @@ class ProductController extends Controller
         $object = new Product($request->all());
 
         if ($validated->fails()) {
-            $result = ['result' => false, 'errors' => $validated->errors()];
+            $result = ['result' => false, 'errors' => $validated->getMessageBag()];
         }
 
         try {
             $result = $object->save();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $result = ['result' => false, 'errors' => $e->getMessage()];
         }
         return response()->json(['result' => $result]);
@@ -78,9 +87,32 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $result = [];
+
+        if ($product != null) {
+            $validated = Validator::make($request->all(), [
+                'name'  => 'required|max:100|min:2|unique:product,name,' . $product->id,
+                'price' => 'required|numeric|gte:0|lte:100000',
+            ]);
+
+            if ($validated->passes()) {
+                try {
+                    $product->update($request->all());
+                    $result = ['result' => true];
+                } catch (\Exception $e) {
+                    $result = ['result' => false, 'errors' => $e->getMessage()];
+                }
+            } else {
+                $result = ['result' => false, 'errors' => $validated->getMessageBag()];
+            }
+        } else {
+            $result = ['result' => false, 'errors' => 'Product not found'];
+        }
+
+        return response()->json($result);
     }
 
     /**
@@ -88,6 +120,19 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product = Product::find($product->id);
+        $result = [];
+
+        if ($product != null) {;
+            try {
+                $product->delete();
+                $result = ['result' => true];
+            } catch (\Exception $e) {
+                $result = ['result' => false, 'errors' => $e->getMessage()];
+            }
+        } else {
+            $result = ['result' => false, 'errors' => 'Product not found'];
+        }
+        return response()->json($result);
     }
 }

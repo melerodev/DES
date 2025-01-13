@@ -9,23 +9,61 @@
     <meta class="url-base" content="{{ url('') }}">
 </head>
 <body>
-    <button id="fetch">fetch</button>
+    <button id="fetch">Fetch</button>
+    <button id="update">Update</button>
+    <button id="delete">Delete</button>
     <script>
-        const fetchBtn = document.getElementById('fetch');
+        const csrf = document.querySelector('.csrf').content;
+        const urlBase = document.querySelector('.url-base').content;
 
-        fetchBtn.addEventListener('click', () => {
+        document.getElementById('fetch').addEventListener('click', () => {
             console.log('fetching...');
-            fetch(document.querySelector('.url-base').content + "/product", {
+            fetch (urlBase + "/product", {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('.csrf').content
+                    'X-CSRF-TOKEN': csrf
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    "name": "qwe",
+                    "name": "Manzana",
                     "price": 100
                 })
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) { console.log(data); })
+            .catch(function(error) { console.log(error); });
+        });
+
+        let fetchUpdateBt = document.getElementById('update')
+        fetchUpdateBt.addEventListener('click', (event) => {
+            fetch(urlBase + '/product/2', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrf
+                },
+                body: JSON.stringify({
+                        'name': '34',
+                        'price': 1.78
+                    })
+                }).
+            then(response => response.json()).
+            then(data => {
+                console.log(data)
+            });
+        });
+
+        document.getElementById('delete').addEventListener('click', () => {
+            console.log('deleting...');
+            fetch (urlBase + "/product/15", {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrf
+                },
+                method: "DELETE"
             })
             .then(function(res) { return res.json(); })
             .then(function(data) { console.log(data); })
