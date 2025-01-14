@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 class SalesController extends Controller
 {
-    /**
-     * Mostrar una lista de ventas.
-     */
     public function index()
     {
-        $sales = Sale::with('images')->get();
+        $sales = Sale::where('issold', false)->get();
         return view('index', compact('sales'));
     }
 
