@@ -1,6 +1,10 @@
-<!-- FILE: compraVenta3/resources/views/index.blade.php -->
+@extends('layouts.app')
 
-<style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+    <style>
         body {
             display: flex;
             justify-content: center;
@@ -29,7 +33,8 @@
         }
 
         .form-container input,
-        .form-container textarea {
+        .form-container textarea,
+        .form-container select {
             width: 94%;
             padding: 8px;
             margin-bottom: 10px;
@@ -50,45 +55,23 @@
         .form-container button:hover {
             background-color: #218838;
         }
-
-        .form-container .img-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .form-container .img-container img {
-            border-radius: 4px;
-            padding: 1px;
-            width: 30%;
-            height: 30%;
-        }
-
-        textarea {
-            resize: unset;
-        }
-
-        .categories {
-            margin-bottom: 10px;
-            width: 100%;
-        }
-</style>
+    </style>
+</head>
 
 <body>
     <div class="form-container">
-        <h2>Crear Producto</h2>
-        <form action="{{ route('sales.store') }}" method="POST" enctype="multipart/form-data">
+        <h2>Editar Producto</h2>
+        <form action="{{ route('sales.update', $sale->id) }}" method="POST">
             @csrf
+            @method('PUT')
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" value="{{ $sale->product }}" required>
 
             <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+            <textarea id="descripcion" name="descripcion" rows="4" required>{{ $sale->description }}</textarea>
 
             <label for="precio">Precio</label>
-            <input type="number" id="precio" name="precio" step="0.01" required>
+            <input type="number" id="precio" name="precio" step="0.01" value="{{ $sale->price }}" required>
 
             <label for="categoria">Categoria</label>
             <select id="categoria" name="categoria" class="categories" required>
@@ -101,23 +84,8 @@
                 @endforeach
             </select>
 
-            <label for="imagenes">Imágenes</label>
-            <input type="file" id="imagenes" name="imagenes[]" multiple required>
-            <div class="img-container"></div>
-            <button type="submit">Crear Producto</button>
+            <button type="submit">Actualizar Producto</button>
         </form>
-        <script>
-            // cuando se suba una imagen, añadirlo al container de imagenes
-            document.getElementById('imagenes').addEventListener('change', function (e) {
-                const container = document.querySelector('.img-container');
-                container.innerHTML = '';
-                for (let i = 0; i < e.target.files.length; i++) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(e.target.files[i]);
-                    container.appendChild(img);
-                }
-            });
-        </script>
     </div>
 </body>
 

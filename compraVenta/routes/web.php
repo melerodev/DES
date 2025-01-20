@@ -23,6 +23,7 @@ Route::get('/createnewproduct', [App\Http\Controllers\HomeController::class, 'cr
 Route::post('/sales/{sale}/buy', [SalesController::class, 'buy'])->name('sales.buy');
 // funcion para getImagePath
 Route::get('/getImagePath/{id}', [App\Http\Controllers\SalesController::class, 'getImagePath'])->name('getImagePath');
+Route::get('/editproduct/{id}', [App\Http\Controllers\HomeController::class, 'edit'])->name('editproduct');
 
 // // Administrators routes
 // Route::get('admin', [App\Http\Controllers\AdministratorsController::class, 'index'])->name('admin.index');

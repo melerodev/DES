@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\User;
+use App\Models\Sale;
 
 class HomeController extends BaseController 
 {
@@ -34,6 +35,12 @@ class HomeController extends BaseController
     public function crearProducto()
     {
         return view('createnewproduct');
+    }
+
+    public function edit($id)
+    {
+        $sale = Sale::find($id);
+        return view('editproduct', ['sale' => $sale]);
     }
 
     function index() {

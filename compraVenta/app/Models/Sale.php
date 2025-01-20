@@ -13,7 +13,6 @@ class Sale extends Model
         'description', 
         'price', 
         'issold', 
-        'image'
     ];
 
     public function category()

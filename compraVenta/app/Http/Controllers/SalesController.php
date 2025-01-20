@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use App\Models\Image;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,7 +39,7 @@ class SalesController extends Controller
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
-            'imagenes.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'categoria' => 'required|string',
         ]);
 
         $path = null;
@@ -55,12 +56,14 @@ class SalesController extends Controller
             'description' => $validated['descripcion'],
             'price' => $validated['precio'],
             'issold' => false, // Inicialmente no está vendida
-            'user_id' => "2",
-            'image' => $path,
-            'category_id' => 1, // Ajusta según las categorías disponiblesç
+            'user_id' => $request->user()->id,
+            'category_id' => $validated['categoria'],
         ]);
 
-
+        $image = Image::create([
+            'sale_id' => $sale->id,
+            'route' => $path,
+        ]);
         
         // Subir las imágenes y asociarlas con la venta
         if ($request->hasFile('imagenes')) {
@@ -85,9 +88,11 @@ class SalesController extends Controller
     /**
      * Mostrar el formulario para editar una venta existente.
      */
-    public function edit(Sale $sale)
+    public function edit($id)
     {
-        return view('sales.edit', compact('sale'));
+        $sale = Sale::find($id);
+        $categories = Category::all();
+        return view('editproduct', compact('sale', 'categories'));
     }
 
     /**
@@ -99,15 +104,17 @@ class SalesController extends Controller
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
+            'categoria' => 'required|exists:categories,id',
         ]);
 
         $sale->update([
             'product' => $validated['nombre'],
             'description' => $validated['descripcion'],
             'price' => $validated['precio'],
+            'category_id' => $validated['categoria'],
         ]);
 
-        return redirect()->route('index')->with('success', 'Venta actualizada correctamente.');
+        return redirect()->route('sales.index')->with('success', 'Producto actualizado correctamente.');
     }
 
     /**

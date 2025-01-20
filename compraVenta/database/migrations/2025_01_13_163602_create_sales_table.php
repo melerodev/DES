@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -24,7 +25,6 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price', 10, 2);
             $table->boolean('issold')->default(false);
-            $table->string('image')->nullable(); // Miniatura
             $table->timestamps();
         });
         
@@ -41,6 +41,20 @@ return new class extends Migration
             $table->timestamps();
         });
         
+
+        // Insertar algunas categorías en la tabla categories
+        DB::table('categories')->insert([
+            ['id' => 1, 'name' => 'Electrónica'],
+            ['id' => 2, 'name' => 'Deportes'],
+            ['id' => 3, 'name' => 'Hogar'],
+            ['id' => 4, 'name' => 'Moda'],
+            ['id' => 5, 'name' => 'Juguetes'],
+            ['id' => 6, 'name' => 'Coches'],
+            ['id' => 7, 'name' => 'Libros'],
+            ['id' => 8, 'name' => 'Música'],
+            ['id' => 9, 'name' => 'Videojuegos'],
+            ['id' => 10, 'name' => 'Otros'],
+        ]);
     }
 
     /**

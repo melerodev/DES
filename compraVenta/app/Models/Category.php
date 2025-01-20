@@ -8,8 +8,11 @@ class Category extends Model
 {
     public $timestamps = false; // Esta tabla no tiene timestamps
 
-    protected $fillable = ['name'];
-
+    protected $fillable = [
+        'id',
+        'name'
+    ];
+    
     public function sales()
     {
         return $this->hasMany(Sale::class);

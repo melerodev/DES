@@ -6,133 +6,114 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
+
     function main() {
         return view('main');
     }
-    
-    function fetch() {
-        return view('fetch');
+
+    public function index() {
+        
+        return response()->json([
+            'products' => Product::orderBy('name')->paginate(10)
+        ]);
     }
 
-    function modal() {
-        return view('modal');
+    public function index1() {
+        return response()->json([
+            'products' => Product::orderBy('name')->get()
+        ]);
     }
-    
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return response()->json(['product' => Product::orderBy('name')->get()]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-    */
 
     public function store(Request $request) {
-        $result = [];
-        $validated = Validator::make($request->all(), [
+        $products = [];
+        $validator = Validator::make($request->all(), [
             'name'  => 'required|unique:product|max:100|min:2',
             'price' => 'required|numeric|gte:0|lte:100000',
         ]);
-
-        $object = new Product($request->all());
-
-        if ($validated->fails()) {
-            $result = ['result' => false, 'errors' => $validated->getMessageBag()];
+        if ($validator->passes()) {
+            $message = '';
+            $object = new Product($request->all());
+            try {
+                $result = $object->save();
+                $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
+            } catch(\Exception $e) {
+                $result = false;
+                $message = $e->getMessage();
+            }
+        } else {
+            $result = false;
+            $message = $validator->getMessageBag();
         }
+        return response()->json(['result' => $result, 'message' => $message, 'products' => $products]);
+    }
 
-        try {
-            $result = $object->save();
-        } catch (\Exception $e) {
-            $result = ['result' => false, 'errors' => $e->getMessage()];
-        }
-        return response()->json(['result' => $result]);
-    } 
-    
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
+    public function show($id) {
         $product = Product::find($id);
         $message = '';
-        
-        if ($product === null) {
-            $message = 'Product not found';
+        if($product === null) {
+            $message = 'Product not found.';
         }
-
-        return response()->json(['message'  => $message, 'product' => $product]);
+        return response()->json([
+            'message' => $message,
+            'product' => $product
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
+        $message = '';
         $product = Product::find($id);
-        $result = [];
-
-        if ($product != null) {
-            $validated = Validator::make($request->all(), [
+        $products = [];
+        $result = false;
+        if($product != null) {
+            $validator = Validator::make($request->all(), [
                 'name'  => 'required|max:100|min:2|unique:product,name,' . $product->id,
                 'price' => 'required|numeric|gte:0|lte:100000',
             ]);
-
-            if ($validated->passes()) {
+            if($validator->passes()) {
                 try {
-                    $product->update($request->all());
-                    $result = ['result' => true];
-                } catch (\Exception $e) {
-                    $result = ['result' => false, 'errors' => $e->getMessage()];
+                    $result = $product->update($request->all());
+                    $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
+                } catch(\Exception $e) {
+                    $message = $e->getMessage();
                 }
             } else {
-                $result = ['result' => false, 'errors' => $validated->getMessageBag()];
+                $message = $validator->getMessageBag();
             }
         } else {
-            $result = ['result' => false, 'errors' => 'Product not found'];
+            $message = 'Product not found';
         }
-
-        return response()->json($result);
+        return response()->json(['result' => $result, 'message' => $message, 'products' => $products]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        $product = Product::find($product->id);
-        $result = [];
-
-        if ($product != null) {;
+    public function destroy(Request $request, $id) {
+        $message = '';
+        $products = [];
+        $product = Product::find($id);
+        $result = false;
+        if($product != null) {
             try {
-                $product->delete();
-                $result = ['result' => true];
-            } catch (\Exception $e) {
-                $result = ['result' => false, 'errors' => $e->getMessage()];
+                $result = $product->delete();
+                //$page = $request->query('page', 1);
+                //$products = Product::orderBy('name')->paginate(10, ['*'], 'page', $page)->setPath(url('product'));
+                $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
+                if($products->isEmpty()) {
+                    $page = $products->lastPage();//$page - 1;
+                    $products = Product::orderBy('name')->paginate(10, ['*'], 'page', $page)->setPath(url('product'));
+                }
+            } catch(\Exception $e) {
+                $message = $e->getMessage();
             }
         } else {
-            $result = ['result' => false, 'errors' => 'Product not found'];
+            $message = 'Product not found';
         }
-        return response()->json($result);
+        return response()->json([
+            'message' => $message,
+            'products' => $products,
+            'result' => $result
+        ]);
     }
 }
+
+
+

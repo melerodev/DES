@@ -44,6 +44,7 @@
                                 </li>
                             @endif
 
+
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
@@ -55,10 +56,12 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
+                                <button class="btn btn-primary"><a style="text-decoration: none; color: white;" href="{{ route('createnewproduct') }}">Crear un nuevo producto</a></button>
+
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
