@@ -1,51 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <meta name="csrf-token" class="csrf" content="{{ csrf_token() }}">
-    <meta class="url-base" content="{{ url('') }}">
-</head>
-<body>
-    <button id="fetch">Fetch</button>
-    <button id="update">Update</button>
-    <button id="delete">Delete</button>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="url-base" content="{{ url('') }}">
+        <title>Document</title>
+    </head>
+    <body>
+        <button id="fetchBt">fetch store</button>
+        <button id="fetchUpdateBt">fetch update</button>
+        <button id="fetchDeleteBt">fetch destroy</button>
+    </body>
     <script>
-        const csrf = document.querySelector('.csrf').content;
-        const urlBase = document.querySelector('.url-base').content;
-
-        document.getElementById('fetch').addEventListener('click', () => {
-            console.log('fetching...');
-            fetch (urlBase + "/product", {
+        let csrf_token = document.querySelector('meta[name="csrf-token"]').content
+        let url_base = document.querySelector('meta[name="url-base"]').content
+        let fetchBt = document.getElementById('fetchBt')
+        fetchBt.addEventListener('click', (event) => {
+            fetch(url_base + '/product', {
+                method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrf
+                    'X-CSRF-Token': csrf_token
                 },
-                method: "POST",
                 body: JSON.stringify({
-                    "name": "Manzana",
-                    "price": 100
-                })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) { console.log(data); })
-            .catch(function(error) { console.log(error); });
+                        'name': 'pepino',
+                        'price': 0.35
+                    })
+                }).
+            then(response => response.json()).
+            then(data => {
+                console.log(data)
+            });
         });
-
-        let fetchUpdateBt = document.getElementById('update')
+        let fetchUpdateBt = document.getElementById('fetchUpdateBt')
         fetchUpdateBt.addEventListener('click', (event) => {
-            fetch(urlBase + '/product/2', {
+            fetch(url_base + '/product/3', {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': csrf
+                    'X-CSRF-Token': csrf_token
                 },
                 body: JSON.stringify({
-                        'name': '34',
+                        'name': 'cebolla',
                         'price': 1.78
                     })
                 }).
@@ -54,21 +53,20 @@
                 console.log(data)
             });
         });
-
-        document.getElementById('delete').addEventListener('click', () => {
-            console.log('deleting...');
-            fetch (urlBase + "/product/15", {
+        let fetchDeleteBt = document.getElementById('fetchDeleteBt')
+        fetchDeleteBt.addEventListener('click', (event) => {
+            fetch(url_base + '/product/3', {
+                method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrf
-                },
-                method: "DELETE"
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) { console.log(data); })
-            .catch(function(error) { console.log(error); });
+                    'X-CSRF-Token': csrf_token
+                }
+            }).
+            then(response => response.json()).
+            then(data => {
+                console.log(data)
+            });
         });
     </script>
-</body>
 </html>

@@ -10,15 +10,27 @@ class Product extends Model
 
     protected $fillable = ['name', 'price'];
 
+    static function change($request) {
+        $product = new Product($request->all());
+        return $product->store();
+    }
+
+    function modify($request) {
+        $result = false;
+        try {
+            $result = $this->update($request->all());
+        } catch(\Exception $e) {
+        }
+        return $result;
+    }
+
     function store() {
         try {
             $result = $this->save();
-            // $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
         } catch(\Exception $e) {
             $result = false;
-            // $message = $e->getMessage();
-
         }
+        return $result;
     }
-}
 
+}
