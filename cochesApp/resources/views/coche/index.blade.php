@@ -61,7 +61,7 @@
                   {{ $coche->modelo }}
                 </td>
                 <td>
-                  {{ $coche->precio }}
+                  {{ $coche->precio }}€
                 </td>
             </tr>
         @endforeach
@@ -69,6 +69,6 @@
     </table>
 </div>
 <div>
-  {{-- $coches->appends(['orderBy' => $orderBy, 'orderType' => $orderType, 'q' => $q, 'rowsPerPage' => $rpp])->onEachSide(2)->links() --}}
+  $coches->appends(['orderBy' => $orderBy, 'orderType' => $orderType, 'q' => $q, 'rowsPerPage' => $rpp])->onEachSide(2)->links()
 </div>
 @endsection

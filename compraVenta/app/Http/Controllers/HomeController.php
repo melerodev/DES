@@ -29,7 +29,8 @@ class HomeController extends BaseController
      */
     public function home()
     {
-        return view('index');
+        $sales = Sale::where('issold', '')->get();
+        return view('index', compact('sales'));
     }
 
     public function crearProducto()

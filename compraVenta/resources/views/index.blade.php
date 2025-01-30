@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        @if ($sales == 0)
+        @if ($sales->isEmpty())
             <div class="col-md-12">
                 <p>No hay productos disponibles</p>
             </div>

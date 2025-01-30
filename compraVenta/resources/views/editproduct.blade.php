@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,36 +58,31 @@
         }
     </style>
 </head>
+<div class="form-container">
+    <h2>Editar Producto</h2>
+    <form action="{{ route('sales.update', $sale->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" value="{{ $sale->product }}" required>
 
-<body>
-    <div class="form-container">
-        <h2>Editar Producto</h2>
-        <form action="{{ route('sales.update', $sale->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" value="{{ $sale->product }}" required>
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" rows="4" required>{{ $sale->description }}</textarea>
 
-            <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required>{{ $sale->description }}</textarea>
+        <label for="precio">Precio</label>
+        <input type="number" id="precio" name="precio" step="0.01" value="{{ $sale->price }}" required>
 
-            <label for="precio">Precio</label>
-            <input type="number" id="precio" name="precio" step="0.01" value="{{ $sale->price }}" required>
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria" class="categories" required>
+            <option value="">Selecciona una categoría</option>
+            @php
+                $categories = App\Models\Category::all();
+            @endphp
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+        </select>
 
-            <label for="categoria">Categoria</label>
-            <select id="categoria" name="categoria" class="categories" required>
-                <option value="">Selecciona una categoría</option>
-                @php
-                    $categories = App\Models\Category::all();
-                @endphp
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
-
-            <button type="submit">Actualizar Producto</button>
-        </form>
-    </div>
-</body>
-
-</html>
+        <button type="submit">Actualizar Producto</button>
+    </form>
+</div>
