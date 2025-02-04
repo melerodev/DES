@@ -13,12 +13,10 @@ class SalesController extends Controller
     public function index()
     {
         $sales = Sale::where('issold', '')->get();
-        $images = null;
-        foreach($sales as $sale) {
-            $images = Image::where('sale_id', $sale->id)->get();
-        }
+        $images = Image::whereIn('sale_id', $sales->pluck('id'))->get();
         return view('index', compact('sales', 'images'));
     }
+    
 
     /**
      * Mostrar el formulario para crear una nueva venta.
