@@ -23,12 +23,12 @@
 
                             <div class="buttons" style="display: flex; justify-content: space-between;">
                                 <!-- Botón Comprar -->
-                                <form action="{{ route('buy', $sale) }}" method="POST">
-                                    @csrf
-                                    @if(Auth::check() && Auth::user()->email_verified_at)
+                                @if(Auth::check() && Auth::user()->email_verified_at)
+                                    <form action="{{ route('buy', $sale) }}" method="POST">
+                                        @csrf
                                         <button type="submit" class="btn btn-primary">Comprar</button>
-                                    @endif
-                                </form>
+                                    </form>
+                                @endif
 
                                 <!-- Botón Eliminar -->
                                 <form action="{{ route('deleteproduct', $sale->id) }}" method="POST">
@@ -44,6 +44,7 @@
 
                                 <!-- Botón Editar -->
                                 @if(Auth::check() && Auth::user()->id == $sale->user_id)
+                                    
                                     <a href="{{ route('editproduct', $sale->id) }}" class="btn btn-warning">
                                         Editar
                                     </a>
