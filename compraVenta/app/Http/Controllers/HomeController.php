@@ -45,7 +45,8 @@ class HomeController extends BaseController
     }
 
     function index() {
-        return view('index');
+        $sales = Sale::where('issold', '')->get();
+        return view('index', compact('sales'));
     }
 
     function verificado() {
