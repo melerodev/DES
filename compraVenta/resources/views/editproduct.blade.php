@@ -1,6 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,11 +72,8 @@
         <label for="categoria">Categoria</label>
         <select id="categoria" name="categoria" class="categories" required>
             <option value="">Selecciona una categoría</option>
-            @php
-                $categories = App\Models\Category::all();
-            @endphp
             @foreach($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                <option value="{{ $category->id }}" {{ $sale->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
             @endforeach
         </select>
 

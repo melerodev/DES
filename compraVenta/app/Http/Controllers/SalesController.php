@@ -12,8 +12,12 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $sales = Sale::where('issold', false)->get();
-        return view('index', compact('sales'));
+        $sales = Sale::where('issold', '')->get();
+        $images = null;
+        foreach($sales as $sale) {
+            $images = Image::where('sale_id', $sale->id)->get();
+        }
+        return view('index', compact('sales', 'images'));
     }
 
     /**
@@ -26,7 +30,7 @@ class SalesController extends Controller
 
     public function buy(Sale $sale)
     {
-        $sale->update(['issold' => true]);
+        $sale->update(attributes: ['issold' => true]);
         return redirect()->route('sales.index')->with('success', 'Producto comprado correctamente.');
     }
 
@@ -88,9 +92,8 @@ class SalesController extends Controller
     /**
      * Mostrar el formulario para editar una venta existente.
      */
-    public function edit($id)
+    public function edit(Sale $sale)
     {
-        $sale = Sale::find($id);
         $categories = Category::all();
         return view('editproduct', compact('sale', 'categories'));
     }
@@ -120,16 +123,20 @@ class SalesController extends Controller
     /**
      * Eliminar una venta.
      */
-    public function destroy(Sale $sale)
-    {
-        // Eliminar las imágenes asociadas
+public function destroy(Sale $sale)
+{
+    // Eliminar imágenes asociadas antes de borrar la venta
+    if ($sale->images) {
         foreach ($sale->images as $image) {
             Storage::disk('public')->delete($image->route);
             $image->delete();
         }
-
-        $sale->delete();
-
-        return redirect()->route('sales.index')->with('success', 'Venta eliminada correctamente.');
     }
+
+    // Eliminar la venta
+    $sale->delete();
+
+    return redirect()->route('sales.index')->with('success', 'Venta eliminada correctamente.');
+}
+
 }

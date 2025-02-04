@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\User;
@@ -16,10 +18,8 @@ class HomeController extends BaseController
      */
     public function __construct()
     {
-        //$this->middleware('auth');  //Excepción de autenticación para el método home se aplica a todos los métodos
-        $this->middleware('auth')->except(['index']);  //Excepción de autenticación para el método index se aplica a todos los métodos excepto el introducido
-        //$this->middleware('auth')->only();  //Excepción de autenticación para el método index solo se aplica al método introducido
-        $this->middleware('verified')->only(['verify']);  //Excepción de verificación de correo para el método verify solo se aplica al método introducido
+        $this->middleware('auth')->except(['index']); 
+        $this->middleware('verified')->only(['verify']);
     }
 
     /**
@@ -29,7 +29,6 @@ class HomeController extends BaseController
      */
     public function home()
     {
-        $sales = Sale::where('issold', '')->get();
         return view('index', compact('sales'));
     }
 
@@ -37,16 +36,21 @@ class HomeController extends BaseController
     {
         return view('createnewproduct');
     }
-
     public function edit($id)
     {
         $sale = Sale::find($id);
-        return view('editproduct', ['sale' => $sale]);
+        $categories = Category::all();
+        return view('editproduct', compact('sale', 'categories'));
     }
 
-    function index() {
+    public function index()
+    {
         $sales = Sale::where('issold', '')->get();
-        return view('index', compact('sales'));
+        $images = null;
+        foreach($sales as $sale) {
+            $images = Image::where('sale_id', $sale->id)->get();
+        }
+        return view('index', compact('sales', 'images'));
     }
 
     function verificado() {

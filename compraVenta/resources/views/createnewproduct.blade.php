@@ -77,48 +77,53 @@
 </style>
 
 <body>
-    <div class="form-container">
-        <h2>Crear Producto</h2>
-        <form action="{{ route('sales.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required>
+    @if (Auth::user()->email_verified_at) 
+        <div class="form-container">
+            <h2>Crear Producto</h2>
+            <form action="{{ route('sales.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+    
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+    
+                <label for="precio">Precio</label>
+                <input type="number" id="precio" name="precio" step="0.01" required>
+    
+                <label for="categoria">Categoria</label>
+                <select id="categoria" name="categoria" class="categories" required>
+                    <option value="">Selecciona una categoría</option>
+                    @php
+                        $categories = App\Models\Category::all();
+                    @endphp
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+    
+                <label for="imagenes">Imágenes</label>
+                <input type="file" id="imagenes" name="imagenes[]" multiple required>
+                <div class="img-container"></div>
+                <button type="submit">Crear Producto</button>
+            </form>
+            <script>
+                // cuando se suba una imagen, añadirlo al container de imagenes
+                document.getElementById('imagenes').addEventListener('change', function (e) {
+                    const container = document.querySelector('.img-container');
+                    container.innerHTML = '';
+                    for (let i = 0; i < e.target.files.length; i++) {
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(e.target.files[i]);
+                        container.appendChild(img);
+                    }
+                });
+            </script>
+        </div>
+    @else
+        <p>Debes verificar tu email para poder publicar productos</p>
+    @endif
 
-            <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
-
-            <label for="precio">Precio</label>
-            <input type="number" id="precio" name="precio" step="0.01" required>
-
-            <label for="categoria">Categoria</label>
-            <select id="categoria" name="categoria" class="categories" required>
-                <option value="">Selecciona una categoría</option>
-                @php
-                    $categories = App\Models\Category::all();
-                @endphp
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
-
-            <label for="imagenes">Imágenes</label>
-            <input type="file" id="imagenes" name="imagenes[]" multiple required>
-            <div class="img-container"></div>
-            <button type="submit">Crear Producto</button>
-        </form>
-        <script>
-            // cuando se suba una imagen, añadirlo al container de imagenes
-            document.getElementById('imagenes').addEventListener('change', function (e) {
-                const container = document.querySelector('.img-container');
-                container.innerHTML = '';
-                for (let i = 0; i < e.target.files.length; i++) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(e.target.files[i]);
-                    container.appendChild(img);
-                }
-            });
-        </script>
-    </div>
 </body>
 
 </html>

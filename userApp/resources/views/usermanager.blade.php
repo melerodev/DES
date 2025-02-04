@@ -37,19 +37,21 @@
         </thead>
         <tbody>
             @foreach($users as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->role }}</td>
-                    <td><a href="{{ route('profile.edit', $user->id) }}">Editar</a></td>
-                    <td>
-                        <form action="{{ route('profile.destroy', $user->id) }}" method="POST" onsubmit="return confirmar()">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
+                @if(Auth::user()->id != $user->id)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->role }}</td>
+                        <td><a href="{{ route('profile.edit', $user->id) }}">Editar</a></td>
+                        <td>
+                            <form action="{{ route('profile.destroy', $user->id) }}" method="POST" onsubmit="return confirmar()">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
