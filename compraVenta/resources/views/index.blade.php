@@ -1,71 +1,121 @@
-@extends('layouts.app')
+@extends('base')
+
+@section('titulo', 'Paginacion')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        @if ($sales->isEmpty() && Auth::check())
-        <div class="col-md-12 d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
-                <p><b>No hay productos disponibles</b></p>
-                <img style="border-radius: 10px;" src="https://c.tenor.com/obu5x3kCUZ4AAAAd/tenor.gif" alt="Bart">
-            </div>
-        @else
-            @foreach ($sales as $sale)
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        @php
-                            $image = $images->where('sale_id', $sale->id)->first();
-                        @endphp
-                        <img src="{{ asset($image ? 'storage/' . $image->route : 'storage/default.jpg') }}" class="card-img-top" alt="{{ $sale->product }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $sale->product }}</h5>
-                            <p class="card-text">Description: {{ $sale->description }}</p>
-                            <p class="card-text">Price: {{ number_format($sale->price, 2) }} €</p>
-                            <p class="card-text">Category: {{ $sale->category->name }}</p>
 
-                            <div class="buttons" style="display: flex; justify-content: space-between;">
-                                <!-- Botón Comprar -->
-                                @if(Auth::check() && Auth::user()->email_verified_at)
-                                    <form action="{{ route('buy', $sale) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary">Comprar</button>
-                                    </form>
-                                @endif
-
-                                <!-- Botón Eliminar -->
-                                <form action="{{ route('deleteproduct', $sale->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    @if(Auth::check() && (Auth::user()->id == $sale->user_id || Auth::user()->role == "admin" || Auth::user()->role == "superadmin"))
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
-                                            Eliminar
-                                        </button>
-                                    @endif
-                                </form>
-
-                                <!-- Botón Editar -->
-                                @if(Auth::check() && Auth::user()->id == $sale->user_id)
-                                    
-                                    <a href="{{ route('editproduct', $sale->id) }}" class="btn btn-warning">
-                                        Editar
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @endif
-    </div>
+<div class="d-flex">
+  <form>
+    <input type="hidden" value="{{$orderBy}}" name="orderBy">
+    <input type="hidden" value="{{$orderType}}" name="orderType">
+    <input type="hidden" value="{{$q}}" name="q">
+    <select name="rpp" id="">
+      @foreach($rpps as $index => $value)
+        <option value="{{$value}}" @if($rpp == $value) selected @endif>{{$value}}</option>
+      @endforeach
+    </select>
+    <button type="submit">ver</button>
+  </form>
+  <form class="mx-3">
+    <input type="hidden" value="{{$orderBy}}" name="orderBy">
+    <input type="hidden" value="{{$orderType}}" name="orderType">
+    <input type="hidden" value="{{$rpp}}" name="rpp">
+    <input type="search" name="q" placeholder="buscar" value="{{$q}}">
+    <button type="submit">filtrar</button>
+  </form>
 </div>
-
-@if(!Auth::check())
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 d-flex justify-content-center align-items-center">
-                <p>Regístrate o inicia sesión con tu cuenta para poder publicar o comprar productos.</p>
-            </div>
-        </div>
-    </div>
-@endif
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+        <th scope="col">
+            #
+            <a href="{{route('index', ['orderBy' => 'id', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'id', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+          <th scope="col">
+            marca
+            <a href="{{route('index', ['orderBy' => 'marca', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'marca', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+          <th scope="col">
+            modelo
+            <a href="{{route('index', ['orderBy' => 'modelo', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'modelo', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+          <th scope="col">
+            precio
+            <a href="{{route('index', ['orderBy' => 'precio', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'precio', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+      </thead>
+      <tbody>
+        @foreach($coches as $coche)
+            <tr>
+                <td>{{ $coche->id }}</td>
+                <td>
+                  {{ $coche->marca }}
+                </td>
+                <td>
+                  {{ $coche->modelo }}
+                </td>
+                <td>
+                  {{ $coche->precio }}
+                </td>
+            </tr>
+        @endforeach
+      </tbody>
+    </table>
+    
+</div>
+<div>
+  {{ $coches->appends(['orderBy' => $orderBy, 'orderType' => $orderType, 'q' => $q, 'rpp' => $rpp])->onEachSide(2)->links() }}
+</div>
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+        <th scope="col">
+            #
+            <a href="{{route('index', ['orderBy' => 'id', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'id', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+          <th scope="col">
+            marca
+            <a href="{{route('index', ['orderBy' => 'marca', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'marca', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+          <th scope="col">
+            modelo
+            <a href="{{route('index', ['orderBy' => 'modelo', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'modelo', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+          <th scope="col">
+            precio
+            <a href="{{route('index', ['orderBy' => 'precio', 'orderType' => 'asc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#down" /></svg></a>
+            <a href="{{route('index', ['orderBy' => 'precio', 'orderType' => 'desc', 'q' => $q, 'rpp' => $rpp, ])}}"><svg class="bi"><use xlink:href="#up" /></svg></a>
+          </th>
+      </thead>
+      <tbody>
+        @foreach($coches as $coche)
+            <tr>
+                <td>{{ $coche->id }}</td>
+                <td>
+                  {{ $coche->marca }}
+                </td>
+                <td>
+                  {{ $coche->modelo }}
+                </td>
+                <td>
+                  {{ $coche->precio }}
+                </td>
+            </tr>
+        @endforeach
+      </tbody>
+    </table>
+    
+</div>
+<div>
+  {{ $coches->appends(['orderBy' => $orderBy, 'orderType' => $orderType, 'q' => $q, 'rpp' => $rpp])->onEachSide(2)->links() }}
+</div>
 @endsection
