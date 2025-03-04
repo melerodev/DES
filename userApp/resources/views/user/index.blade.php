@@ -43,6 +43,15 @@
                         </div>
                         @endif
 
+                        <!-- Contraseña Actual -->
+                        <div class="mb-3">
+                            <label for="current_password" class="form-label fw-semibold">Contraseña Actual:</label>
+                            <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password" required>
+                            @error('current_password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <!-- Nueva Contraseña -->
                         <div class="mb-3">
                             <label for="password" class="form-label fw-semibold">Nueva Contraseña (opcional):</label>
