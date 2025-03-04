@@ -43,10 +43,11 @@ export default class ModalEvents {
         this.registerPassword = document.getElementById('registerPassword');
 
         this.modalView = document.getElementById('viewModal');
+        this.viewCreatedAt = document.getElementById('viewCreatedAt');
         this.viewId = document.getElementById('viewId');
         this.viewName = document.getElementById('viewName');
-        this.viewArtist = document.getElementById('viewArtist');
-        this.viewCategory = document.getElementById('viewCategory');
+        this.viewPrice = document.getElementById('viewPrice');
+        this.viewUpdatedAt = document.getElementById('viewUpdatedAt');
 
         this.productError = document.getElementById('productError');
         this.productSuccess = document.getElementById('productSuccess');
@@ -75,21 +76,8 @@ export default class ModalEvents {
         this.modalEdit.addEventListener('show.bs.modal', event => {
             document.getElementById('modalEditWarning').style.display = 'none';
             this.fetchUrl = event.relatedTarget.dataset.url;
-            this.editTitle.value = event.relatedTarget.dataset.title;
-            this.editArtist.value = event.relatedTarget.dataset.artist;
-        
-            const editCategory = document.getElementById('editCategory');
-            editCategory.innerHTML = ''; 
-            const categories = ['Rock', 'Pop', 'Jazz'];
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                if (category === event.relatedTarget.dataset.category) {
-                    option.selected = true;
-                }
-                editCategory.appendChild(option);
-            });
+            this.editTitle.value = event.relatedTarget.dataset.title;   // Asumiendo que pasas "title" en el data-attribute
+            this.editArtist.value = event.relatedTarget.dataset.artist; // Asumiendo que pasas "artist" en el data-attribute
         });
 
         this.modalLogin.addEventListener('show.bs.modal', event => {
@@ -108,16 +96,15 @@ export default class ModalEvents {
 
         this.modalView.addEventListener('show.bs.modal', event => {
             document.getElementById('modalViewWarning').style.display= 'none';
+            this.viewCreatedAt.value = '';
             this.viewId.value = event.relatedTarget.dataset.id;
             this.viewName.value = event.relatedTarget.dataset.name;
-            console.log(event.relatedTarget);
-            this.viewArtist.value = event.relatedTarget.dataset.artist;
-            this.viewCategory.value = event.relatedTarget.dataset.category;
+            this.viewPrice.value = event.relatedTarget.dataset.price;
+            this.viewUpdatedAt.value = '';    
             const url = event.relatedTarget.dataset.url;
             this.httpClient.get(
                 url,
-                {
-                },
+                {},
                 data => this.responseShow(data)
             );
         });

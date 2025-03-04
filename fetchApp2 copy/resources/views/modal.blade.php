@@ -52,7 +52,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal Edit -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -70,12 +69,6 @@
                     <div class="mb-3">
                         <label for="editArtist" class="form-label">Artist</label>
                         <input type="text" class="form-control" id="editArtist" name="artist">
-                    </div>
-                    <div class="mb-3">
-                        <label for="editCategory" class="form-label">Category</label>
-                        <select name="category" id="editCategory" class="form-select">
-                            <option value="value1"></option>
-                        </select>
                     </div>
                 </form>
             </div>
@@ -160,7 +153,7 @@
             <div class="modal-body">
                 <form id="viewForm">
                     <div class="mb-3">
-                        <label for="viewId" class="form-label">ID</label>
+                        <label for="viewId" class="form-label">Id</label>
                         <input disabled readonly type="text" class="form-control" id="viewId">
                     </div>
                     <div class="mb-3">
@@ -168,12 +161,16 @@
                         <input disabled readonly type="text" class="form-control" id="viewName">
                     </div>
                     <div class="mb-3">
-                        <label for="viewArtist" class="form-label">Artist</label>
-                        <input disabled readonly type="text" class="form-control" id="viewArtist">
+                        <label for="viewPrice" class="form-label">Price</label>
+                        <input disabled readonly type="number" class="form-control" id="viewPrice">
                     </div>
                     <div class="mb-3">
-                        <label for="viewCategory" class="form-label">Category</label>
-                        <input disabled readonly type="text" class="form-control" id="viewCategory">
+                        <label for="viewCreatedAt" class="form-label">Created at</label>
+                        <input disabled readonly type="datetime" class="form-control" id="viewCreatedAt">
+                    </div>
+                    <div class="mb-3">
+                        <label for="viewUpdatedAt" class="form-label">Updated at</label>
+                        <input disabled readonly type="datetime" class="form-control" id="viewUpdatedAt">
                     </div>
                 </form>
             </div>

@@ -4,7 +4,7 @@ export default class ResponseRow {
         this.currentPage = currentPage;
     }
 
-    add({ id, name, imageUrl, songUrl, artist, category }) {
+    add({ id, name, imageUrl, songUrl, category }) {
         if (!this.rowDiv || this.rowDiv.children.length >= 3) {
             this.rowDiv = document.createElement('div');
             this.rowDiv.classList.add('row', 'mb-4');
@@ -29,10 +29,6 @@ export default class ResponseRow {
         title.classList.add('card-title');
         title.textContent = name;
 
-        const artistParagraph = document.createElement('p');
-        artistParagraph.classList.add('card-text');
-        artistParagraph.textContent = `Artist: ${artist}`;
-
         const categoryParagraph = document.createElement('p');
         categoryParagraph.classList.add('card-text');
         categoryParagraph.textContent = `Category: ${category}`;
@@ -49,7 +45,6 @@ export default class ResponseRow {
         audio.classList.add('card-text');
 
         const buttonView = document.createElement('a');
-        const categories = ['Rock', 'Pop', 'Jazz']; 
         let textNode = document.createTextNode('View');
         buttonView.appendChild(textNode);
         buttonView.setAttribute('data-bs-toggle', 'modal');
@@ -57,20 +52,17 @@ export default class ResponseRow {
         buttonView.classList.add('btn', 'btn-primary', 'col-auto');
         buttonView.dataset.id = id;
         buttonView.dataset.name = name;
-        buttonView.dataset.artist = artist;
-        buttonView.dataset.category = categories[category - 1];
         buttonView.dataset.url = "/song/" + id;
         buttonView.dataset.method = "get";
 
-        const buttonEdit = document.createElement('a');
-        buttonEdit.textContent = 'Edit';
+        const buttonEdit = document.createElement('a')
+        textNode = document.createTextNode('Edit');
+        buttonEdit.appendChild(textNode);
         buttonEdit.setAttribute('data-bs-toggle', 'modal');
         buttonEdit.setAttribute('data-bs-target', '#editModal');
         buttonEdit.classList.add('btn', 'btn-warning', 'col-auto');
         buttonEdit.dataset.id = id;
-        buttonEdit.dataset.title = title.textContent;
-        buttonEdit.dataset.artist = artist;
-        buttonEdit.dataset.category = category;
+        buttonEdit.dataset.name = name;
         buttonEdit.dataset.url = "/song/" + id;
         buttonEdit.dataset.method = "put";
 
@@ -87,7 +79,7 @@ export default class ResponseRow {
 
         buttonContainer.append(buttonView, buttonEdit, buttonDelete);
 
-        cardBody.append(title, artistParagraph, categoryParagraph, audio, buttonContainer);
+        cardBody.append(title, categoryParagraph, audio, buttonContainer);
         cardDiv.append(img, cardBody);
         colDiv.appendChild(cardDiv);
         this.rowDiv.appendChild(colDiv);
