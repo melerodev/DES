@@ -26,7 +26,6 @@ export default class ModalEvents {
         this.modalDelete = document.getElementById('deleteModal');
         this.modalDeleteButton = document.getElementById('modalDeleteButton');
         this.deleteName = document.getElementById('deleteName');
-        this.deletePrice = document.getElementById('deletePrice');
 
         this.modalEdit = document.getElementById('editModal');
         this.modalEditButton = document.getElementById('modalEditButton');
@@ -78,7 +77,6 @@ export default class ModalEvents {
             document.getElementById('modalDeleteWarning').style.display= 'none';
             this.fetchUrl = event.relatedTarget.dataset.url;
             this.deleteName.value = event.relatedTarget.dataset.name;
-            this.deletePrice.value = event.relatedTarget.dataset.price;
         });
 
         this.modalEdit.addEventListener('show.bs.modal', event => {
