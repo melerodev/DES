@@ -76,7 +76,6 @@ export default class ModalEvents {
         this.modalDelete.addEventListener('show.bs.modal', event => {
             document.getElementById('modalDeleteWarning').style.display= 'none';
             this.fetchUrl = event.relatedTarget.dataset.url;
-            this.deleteName.value = event.relatedTarget.dataset.name;
         });
 
         this.modalEdit.addEventListener('show.bs.modal', event => {
