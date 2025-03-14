@@ -28,24 +28,56 @@ class SongController extends Controller {
     }
 
     public function store(Request $request) {
+        $message = '';
+        $result = false;
         $songs = [];
+    
         $validator = Validator::make($request->all(), [
-            'title'  => 'required|unique:songs|max:100|min:2',
+            'title' => 'required|max:100|min:2|unique:songs,title',
             'artist' => 'required|max:100|min:2',
+            'category_id' => 'required|exists:categories,id',
+            'route_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'route_song' => 'required|file|mimes:mp3,wav,ogg|max:10240'
         ]);
+    
         if ($validator->passes()) {
-            $message = '';
-            $result = Song::create($request->all());
-            if($result) {
+            try {
+                // Manejar la subida de archivos
+                $imageFile = $request->file('route_image');
+                $songFile = $request->file('route_song');
+                
+                // Generar nombres únicos para los archivos
+                $imageName = time() . '_' . $imageFile->getClientOriginalName();
+                $songName = time() . '_' . $songFile->getClientOriginalName();
+                
+                // Guardar los archivos en el almacenamiento
+                $imageFile->move(storage_path('app/public/imgs'), $imageName);
+                $songFile->move(storage_path('app/public/songs'), $songName);
+                
+                // Crear la canción en la base de datos
+                $song = new Song();
+                $song->title = $request->title;
+                $song->artist = $request->artist;
+                $song->category_id = $request->category_id;
+                $song->route_image = $imageName;
+                $song->route_song = $songName;
+                $song->save();
+                
+                $result = true;
                 $songs = Song::orderBy('title')->paginate(10)->setPath(url('song'));
-            } else {
-                $message = 'Message song has not been saved.';
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
             }
         } else {
-            $result = false;
             $message = $validator->getMessageBag();
         }
-        return response()->json(['result' => $result, 'message' => $message, 'songs' => $songs]);
+    
+        return response()->json([
+            'result' => $result,
+            'message' => $message,
+            'songs' => $songs,
+            'user' => Auth::user()
+        ]);
     }
 
     public function show($id) {
@@ -69,6 +101,7 @@ class SongController extends Controller {
             $validator = Validator::make($request->all(), [
                 'title'  => 'required|max:100|min:2|unique:songs,title,' . $song->id,
                 'artist' => 'required|max:100|min:2',
+                'category_id' => 'required|exists:categories,id' // Cambiar 'category' a 'category_id'
             ]);
             if($validator->passes()) {
                 $result = $song->update($request->all());
@@ -83,7 +116,12 @@ class SongController extends Controller {
         } else {
             $message = 'Song not found';
         }
-        return response()->json(['result' => $result, 'message' => $message, 'songs' => $songs]);
+        return response()->json([
+            'result' => $result,
+            'message' => $message,
+            'songs' => $songs,
+            'user' => Auth::user() // Agrega la información del usuario a la respuesta
+        ]);
     }
     
     public function destroy(Request $request, $id) {

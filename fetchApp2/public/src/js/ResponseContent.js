@@ -9,7 +9,7 @@ export default class ResponseContent {
         this.paginationContent = paginationContent;
         this.userContent = userContent;
         this.pageItem = new PageItem(this.paginationContent);
-        this.responseRow = new ResponseRow(this.content);
+        this.responseRow = new ResponseRow(this.content, null, document.querySelector('meta[name="url-base"]')['content'], document.querySelector('meta[name="csrf-token"]')['content']);
     }
 
     cleanContent(element) {
@@ -31,7 +31,8 @@ export default class ResponseContent {
         this.setUserContent(result.user);
 
         const buttonCreate = document.createElement('button');
-        buttonCreate.textContent = 'create';
+        buttonCreate.textContent = 'Create';
+        buttonCreate.style.margin = '0 0 10px';
         buttonCreate.setAttribute('data-bs-toggle', 'modal');
         buttonCreate.setAttribute('data-bs-target', '#createModal');
         buttonCreate.classList.add('btn', 'btn-success');

@@ -2,22 +2,37 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createModalLabel">Create</h1>
+                <h1 class="modal-title fs-5" id="createModalLabel">Create Song</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="createForm">
+                <form id="createForm" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="createName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="createName" name="name">
+                        <label for="createTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="createTitle" name="title" required>
                     </div>
                     <div class="mb-3">
-                        <label for="createPrice" class="form-label">Price</label>
-                        <input type="number" class="form-control" id="createPrice" name="price">
+                        <label for="createArtist" class="form-label">Artist</label>
+                        <input type="text" class="form-control" id="createArtist" name="artist" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createCategory" class="form-label">Category</label>
+                        <select name="category_id" id="createCategory" class="form-select" required>
+                            <option value="">Select Category</option>
+                            <!-- Aquí puedes agregar las opciones de categorías dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="createImage" name="route_image" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createSong" class="form-label">Song</label>
+                        <input type="file" class="form-control" id="createSong" name="route_song" accept="audio/*" required>
                     </div>
                 </form>
             </div>
-            <div class="alert alert-warning" role="alert" id="modalCreateWarning">An error ocurred. The product has not been created.</div>
+            <div class="alert alert-warning" role="alert" id="modalCreateWarning">An error occurred. The song has not been created.</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="modalCreateButton">Create</button>
@@ -25,6 +40,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -37,10 +53,6 @@
                     <div class="mb-3">
                         <label for="deleteName" class="form-label">Name</label>
                         <input readonly disabled type="text" class="form-control" id="deleteName" name="name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="deletePrice" class="form-label">Price</label>
-                        <input readonly disabled type="number" class="form-control" id="deletePrice" name="price">
                     </div>
                 </form>
             </div>
@@ -115,6 +127,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -146,10 +159,11 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="modalRegisterUserButton">Register</button>
-            </div>
+            </div> 
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -180,7 +194,6 @@
             <div class="alert alert-warning" role="alert" id="modalViewWarning">An error ocurred. Product not found.</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <!--<button type="button" class="btn btn-primary">Ok</button>-->
             </div>
         </div>
     </div>

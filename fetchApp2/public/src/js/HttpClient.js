@@ -26,11 +26,9 @@ export default class HttpClient {
         }
         fetch(fullUrl, options)
             .then(response => {
-                console.log(response.status);
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 callBack(data);
             })
             .catch(error => {
@@ -48,6 +46,30 @@ export default class HttpClient {
 
     post(url, parameters = {}, callBack) {
         this.request(url, 'POST', parameters, {}, callBack);
+    }
+
+    postFormData(url, formData, callBack) {
+        const fullUrl = this.baseUrl + url;
+        const options = {
+            method: 'POST',
+            headers: {
+                'X-CSRF-Token': this.csrfToken,
+                'Accept': 'application/json'
+                // No incluir 'Content-Type' aquí, FormData lo establece automáticamente
+            },
+            body: formData
+        };
+        
+        fetch(fullUrl, options)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                callBack(data);
+            })
+            .catch(error => {
+                console.log(url, 'POST', error);
+            });
     }
 
     put(url, parameters = {}, callBack) {

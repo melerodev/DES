@@ -17,8 +17,11 @@ export default class ModalEvents {
 
         this.modalCreate = document.getElementById('createModal');
         this.modalCreateButton = document.getElementById('modalCreateButton');
-        this.createName = document.getElementById('createName');
-        this.createPrice = document.getElementById('createPrice');
+        this.createTitle = document.getElementById('createTitle');
+        this.createArtist = document.getElementById('createArtist');
+        this.createCategory = document.getElementById('createCategory');
+        this.createImage = document.getElementById('createImage');
+        this.createSong = document.getElementById('createSong');
 
         this.modalDelete = document.getElementById('deleteModal');
         this.modalDeleteButton = document.getElementById('modalDeleteButton');
@@ -29,6 +32,7 @@ export default class ModalEvents {
         this.modalEditButton = document.getElementById('modalEditButton');
         this.editTitle = document.getElementById('editTitle');
         this.editArtist = document.getElementById('editArtist');
+        this.editCategory = document.getElementById('editCategory');
 
         this.modalLogin = document.getElementById('loginModal');
         this.modalLoginUserButton = document.getElementById('modalLoginUserButton');
@@ -53,6 +57,8 @@ export default class ModalEvents {
 
         this.logoutButton = document.getElementById('logoutButton');
 
+        this.categories = {};
+
         this.assignEvents();
     }
 
@@ -61,8 +67,11 @@ export default class ModalEvents {
         this.modalCreate.addEventListener('show.bs.modal', event => {
             document.getElementById('modalCreateWarning').style.display = 'none';
             this.fetchUrl = event.relatedTarget.dataset.url;
-            this.createName.value = '';
-            this.createPrice.value = '';
+            this.createTitle.value = '';
+            this.createArtist.value = '';
+            this.createCategory.value = '';
+            this.createImage.value = '';
+            this.createSong.value = '';
         });
 
         this.modalDelete.addEventListener('show.bs.modal', event => {
@@ -73,23 +82,30 @@ export default class ModalEvents {
         });
 
         this.modalEdit.addEventListener('show.bs.modal', event => {
+            this.httpClient.get(
+                '/categories',
+                {},
+                (data) => {
+                    console.log('Response from /categories:', data); // Agrega esto para depuración
+                    this.categories = data.categories;
+                    console.log(this.categories);
+        
+                    // Llenar el select con las categorías
+                    const editCategorySelect = this.editCategory;
+                    editCategorySelect.innerHTML = ''; // Limpiar el select
+                    for (const [key, value] of Object.entries(this.categories)) {
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = value;
+                        editCategorySelect.appendChild(option);
+                    }
+                }
+            );
+        
             document.getElementById('modalEditWarning').style.display = 'none';
             this.fetchUrl = event.relatedTarget.dataset.url;
             this.editTitle.value = event.relatedTarget.dataset.title;
             this.editArtist.value = event.relatedTarget.dataset.artist;
-        
-            const editCategory = document.getElementById('editCategory');
-            editCategory.innerHTML = ''; 
-            const categories = ['Rock', 'Pop', 'Jazz'];
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                if (category === event.relatedTarget.dataset.category) {
-                    option.selected = true;
-                }
-                editCategory.appendChild(option);
-            });
         });
 
         this.modalLogin.addEventListener('show.bs.modal', event => {
@@ -110,8 +126,8 @@ export default class ModalEvents {
             document.getElementById('modalViewWarning').style.display= 'none';
             this.viewId.value = event.relatedTarget.dataset.id;
             this.viewName.value = event.relatedTarget.dataset.name;
-            console.log(event.relatedTarget);
-            this.viewArtist.value = event.relatedTarget.dataset.artist;
+            this.viewArtist.value = "XD";
+            console.log(event.relatedTarget.dataset.category);
             this.viewCategory.value = event.relatedTarget.dataset.category;
             const url = event.relatedTarget.dataset.url;
             this.httpClient.get(
@@ -122,14 +138,65 @@ export default class ModalEvents {
             );
         });
 
+        this.modalCreate.addEventListener('show.bs.modal', event => {
+            document.getElementById('modalCreateWarning').style.display = 'none';
+            this.fetchUrl = event.relatedTarget.dataset.url;
+            this.createTitle.value = '';
+            this.createArtist.value = '';
+            this.createCategory.value = '';
+            this.createImage.value = '';
+            this.createSong.value = '';
+        
+            // Llenar el select con las categorías
+            this.httpClient.get(
+                '/categories',
+                {},
+                (data) => {
+                    console.log('Response from /categories:', data); // Agrega esto para depuración
+                    this.categories = data.categories;
+
+                    const createCategorySelect = this.createCategory;
+                    createCategorySelect.innerHTML = ''; // Limpiar el select
+                    
+                    for (const [key, value] of Object.entries(this.categories)) {
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = value;
+                        createCategorySelect.appendChild(option);
+                    }
+                }
+            );
+        });
+
+        // this.modalCreateButton.addEventListener('click', event => {
+        //     console.log(this.createImage.files[0]); 
+        //     console.log(this.createSong.files[0]);
+        //     this.httpClient.post(
+        //         this.fetchUrl,
+        //         {
+        //             title: this.createTitle.value,
+        //             artist: this.createArtist.value,
+        //             category_id: this.createCategory.value,
+        //             route_image: this.createImage.value,
+        //             route_song: this.createSong.value
+        //         },
+        //         data => this.responseCreate(data)
+        //     );
+        // });
+
         this.modalCreateButton.addEventListener('click', event => {
-            this.httpClient.post(
+            const formData = new FormData();
+            formData.append('title', this.createTitle.value);
+            formData.append('artist', this.createArtist.value);
+            formData.append('category_id', this.createCategory.value);
+            formData.append('route_image', this.createImage.files[0]);
+            formData.append('route_song', this.createSong.files[0]);
+
+            console.log(this.createImage.files[0]);
+            
+            this.httpClient.postFormData(
                 this.fetchUrl,
-                {
-                    name: this.createName.value,
-                    price: this.createPrice.value,
-                    page: this.responseContent.currentPage
-                },
+                formData,
                 data => this.responseCreate(data)
             );
         });
@@ -147,8 +214,9 @@ export default class ModalEvents {
             this.httpClient.put(
                 this.fetchUrl,
                 {
-                    name: this.editTitle.value,
-                    price: this.editArtist.value,
+                    title: this.editTitle.value,
+                    artist: this.editArtist.value,
+                    category_id: this.editCategory.value, // Asegúrate de enviar el valor de category_id
                     page: this.responseContent.currentPage
                 },
                 data => this.responseEdit(data)
@@ -204,6 +272,7 @@ export default class ModalEvents {
     }
 
     responseCreate(data) {
+        console.log('responseCreate', data);
         if(data.result) {
             this.productSuccess.style.display = 'block';
             bootstrap.Modal.getInstance(this.modalCreate).hide();
@@ -255,12 +324,9 @@ export default class ModalEvents {
     }
 
     responseShow(data) {
-        const {id, name, price, created_at, updated_at} = data.product;
-        this.viewCreatedAt.value = this.formattedDate(created_at);
+        const {id, artist} = data.song;
         this.viewId.value = id;
-        this.viewName.value = name;
-        this.viewPrice.value = price;
-        this.viewUpdatedAt.value = this.formattedDate(updated_at);
+        this.viewArtist.value = artist;
     }
 
     init() {

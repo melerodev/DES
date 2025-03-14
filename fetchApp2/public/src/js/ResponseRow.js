@@ -1,7 +1,27 @@
+import HttpClient from "./HttpClient.js";
+
 export default class ResponseRow {
-    constructor(parent, currentPage) {
+    constructor(parent, currentPage, url, csrf) {
         this.parent = parent;
         this.currentPage = currentPage;
+        this.url = url;
+        this.csrf = csrf;
+        this.httpClient = new HttpClient(this.url, this.csrf);
+        this.categories = {};
+
+        // Cargar las categorías al inicializar
+        this.loadCategories();
+    }
+
+
+    loadCategories() {
+        this.httpClient.get(
+            '/categories',
+            {},
+            (data) => {
+                this.categories = data.categories;
+            }
+        );
     }
 
     add({ id, name, imageUrl, songUrl, artist, category }) {
@@ -35,7 +55,7 @@ export default class ResponseRow {
 
         const categoryParagraph = document.createElement('p');
         categoryParagraph.classList.add('card-text');
-        categoryParagraph.textContent = `Category: ${category}`;
+        categoryParagraph.textContent = `Category: ${this.categories[category] || category}`;
 
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('buttons');
@@ -49,7 +69,6 @@ export default class ResponseRow {
         audio.classList.add('card-text');
 
         const buttonView = document.createElement('a');
-        const categories = ['Rock', 'Pop', 'Jazz']; 
         let textNode = document.createTextNode('View');
         buttonView.appendChild(textNode);
         buttonView.setAttribute('data-bs-toggle', 'modal');
@@ -58,7 +77,7 @@ export default class ResponseRow {
         buttonView.dataset.id = id;
         buttonView.dataset.name = name;
         buttonView.dataset.artist = artist;
-        buttonView.dataset.category = categories[category - 1];
+        buttonView.dataset.category = this.categories[category] || category;
         buttonView.dataset.url = "/song/" + id;
         buttonView.dataset.method = "get";
 
@@ -70,11 +89,11 @@ export default class ResponseRow {
         buttonEdit.dataset.id = id;
         buttonEdit.dataset.title = title.textContent;
         buttonEdit.dataset.artist = artist;
-        buttonEdit.dataset.category = category;
+        buttonEdit.dataset.category = this.categories[category] || category;
         buttonEdit.dataset.url = "/song/" + id;
         buttonEdit.dataset.method = "put";
 
-        const buttonDelete = document.createElement('a')
+        const buttonDelete = document.createElement('a');
         textNode = document.createTextNode('Delete');
         buttonDelete.appendChild(textNode);
         buttonDelete.setAttribute('data-bs-toggle', 'modal');
@@ -91,16 +110,5 @@ export default class ResponseRow {
         cardDiv.append(img, cardBody);
         colDiv.appendChild(cardDiv);
         this.rowDiv.appendChild(colDiv);
-    }
-
-    #createButton(text, btnClass, modalTarget, id, name) {
-        const button = document.createElement('a');
-        button.textContent = text;
-        button.classList.add('btn', btnClass);
-        button.setAttribute('data-bs-toggle', 'modal');
-        button.setAttribute('data-bs-target', modalTarget);
-        button.dataset.id = id;
-        button.dataset.name = name;
-        return button;
     }
 }
