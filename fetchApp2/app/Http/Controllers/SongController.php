@@ -83,7 +83,7 @@ class SongController extends Controller {
     public function show($id) {
         $song = Song::find($id);
         $message = '';
-        if($song === null) {
+        if ($song === null) {
             $message = 'Song not found.';
         }
         return response()->json([
@@ -97,7 +97,7 @@ class SongController extends Controller {
         $song = Song::find($id);
         $songs = [];
         $result = false;
-        if($song != null) {
+        if ($song != null) {
             $validator = Validator::make($request->all(), [
                 'title'  => 'required|max:100|min:2|unique:songs,title,' . $song->id,
                 'artist' => 'required|max:100|min:2',
@@ -129,13 +129,15 @@ class SongController extends Controller {
         $songs = [];
         $song = Song::find($id);
         $result = false;
-        if($song != null) {
+        if ($song != null) {
             try {
                 $result = $song->delete();
                 $songs = Song::orderBy('title')->paginate(10)->setPath(url('song'));
                 if($songs->isEmpty()) {
                     $page = $songs->lastPage();
                     $request->merge(['page' => $page]);
+                    $songs = Song::orderBy('title')->paginate(10)->setPath(url('song'));
+                } else {
                     $songs = Song::orderBy('title')->paginate(10)->setPath(url('song'));
                 }
             } catch(\Exception $e) {
@@ -147,7 +149,8 @@ class SongController extends Controller {
         return response()->json([
             'message' => $message,
             'songs' => $songs,
-            'result' => $result
+            'result' => $result,
+            'user' => Auth::user()
         ]);
     }
 }

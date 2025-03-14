@@ -84,13 +84,12 @@ export default class ModalEvents {
                 '/categories',
                 {},
                 (data) => {
-                    console.log('Response from /categories:', data); // Agrega esto para depuración
+                    console.log('Response from /categories:', data);
                     this.categories = data.categories;
                     console.log(this.categories);
         
-                    // Llenar el select con las categorías
                     const editCategorySelect = this.editCategory;
-                    editCategorySelect.innerHTML = ''; // Limpiar el select
+                    editCategorySelect.innerHTML = '';
                     for (const [key, value] of Object.entries(this.categories)) {
                         const option = document.createElement('option');
                         option.value = key;
@@ -145,16 +144,15 @@ export default class ModalEvents {
             this.createImage.value = '';
             this.createSong.value = '';
         
-            // Llenar el select con las categorías
             this.httpClient.get(
                 '/categories',
                 {},
                 (data) => {
-                    console.log('Response from /categories:', data); // Agrega esto para depuración
+                    console.log('Response from /categories:', data);
                     this.categories = data.categories;
 
                     const createCategorySelect = this.createCategory;
-                    createCategorySelect.innerHTML = ''; // Limpiar el select
+                    createCategorySelect.innerHTML = '';
                     
                     for (const [key, value] of Object.entries(this.categories)) {
                         const option = document.createElement('option');
@@ -166,22 +164,6 @@ export default class ModalEvents {
             );
         });
 
-        // this.modalCreateButton.addEventListener('click', event => {
-        //     console.log(this.createImage.files[0]); 
-        //     console.log(this.createSong.files[0]);
-        //     this.httpClient.post(
-        //         this.fetchUrl,
-        //         {
-        //             title: this.createTitle.value,
-        //             artist: this.createArtist.value,
-        //             category_id: this.createCategory.value,
-        //             route_image: this.createImage.value,
-        //             route_song: this.createSong.value
-        //         },
-        //         data => this.responseCreate(data)
-        //     );
-        // });
-
         this.modalCreateButton.addEventListener('click', event => {
             const formData = new FormData();
             formData.append('title', this.createTitle.value);
@@ -189,8 +171,6 @@ export default class ModalEvents {
             formData.append('category_id', this.createCategory.value);
             formData.append('route_image', this.createImage.files[0]);
             formData.append('route_song', this.createSong.files[0]);
-
-            console.log(this.createImage.files[0]);
             
             this.httpClient.postFormData(
                 this.fetchUrl,
@@ -205,7 +185,8 @@ export default class ModalEvents {
                 {
                     page: this.responseContent.currentPage
                 },
-                data => this.responseDelete(data));
+                data => this.responseDelete(data)
+            );
         });
 
         this.modalEditButton.addEventListener('click', event => {
@@ -244,10 +225,6 @@ export default class ModalEvents {
                 data => this.responseRegister(data)
             );
         });
-
-        /*this.logoutButton.addEventListener('click', event => {
-            console.log('adios');
-        });*/
     }
 
     formattedDate(date) {
@@ -263,7 +240,7 @@ export default class ModalEvents {
                 this.httpClient.post(
                     link.dataset.url,
                     {},
-                    data => console.log(data) //this.responseCommonContent(data)
+                    data => console.log(data)
                 );
             });
         }
@@ -274,6 +251,7 @@ export default class ModalEvents {
         if(data.result) {
             this.productSuccess.style.display = 'block';
             bootstrap.Modal.getInstance(this.modalCreate).hide();
+            // Actualiza el contenido con los nuevos datos
             this.responseCommonContent(data);
             setTimeout(() => {
                 this.productSuccess.style.display= 'none';
@@ -284,6 +262,7 @@ export default class ModalEvents {
     }
 
     responseDelete(data) {
+        console.log('responseDelete', data);
         if(data.result) {
             this.productSuccess.style.display = 'block';
             bootstrap.Modal.getInstance(this.modalDelete).hide();
