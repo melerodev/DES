@@ -13,3 +13,4 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [UserController::class, 'logout'])->name('logout');
 Route::post('register', [UserController::class, 'register'])->name('register');
 Route::get('/categories', [CategoriesController::class, 'index']);
+Route::post('/categories', [CategoriesController::class, 'store']);

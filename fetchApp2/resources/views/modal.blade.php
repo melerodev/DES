@@ -41,6 +41,33 @@
     </div>
 </div>
 
+<!-- Modal para crear categorias -->
+<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createCategoryModalLabel">Create Category</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createCategoryForm">
+                    <div class="mb-3">
+                        <label for="createCategoryName" class="form-label
+                        ">Name</label>
+                        <input type="text" class="form-control" id="createCategoryName" name="name" required>
+                    </div>
+                </form>
+            </div>
+            <div class="alert alert-warning" role="alert" id="modalCreateCategoryWarning">An error occurred. The category has not been created.</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="modalCreateCategoryButton">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

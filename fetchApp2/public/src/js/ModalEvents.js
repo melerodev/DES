@@ -23,6 +23,10 @@ export default class ModalEvents {
         this.createImage = document.getElementById('createImage');
         this.createSong = document.getElementById('createSong');
 
+        this.modalCreateCategory = document.getElementById('createCategoryModal');
+        this.modalCreateCategoryButton = document.getElementById('modalCreateCategoryButton');
+        this.createCategoryName = document.getElementById('createCategoryName');
+
         this.modalDelete = document.getElementById('deleteModal');
         this.modalDeleteButton = document.getElementById('modalDeleteButton');
         this.deleteName = document.getElementById('deleteName');
@@ -148,7 +152,6 @@ export default class ModalEvents {
                 '/categories',
                 {},
                 (data) => {
-                    console.log('Response from /categories:', data);
                     this.categories = data.categories;
 
                     const createCategorySelect = this.createCategory;
@@ -176,6 +179,17 @@ export default class ModalEvents {
                 this.fetchUrl,
                 formData,
                 data => this.responseCreate(data)
+            );
+        });
+
+        this.modalCreateCategoryButton.addEventListener('click', event => {
+            const formData = new FormData();
+            formData.append('name', this.createCategoryName.value);
+        
+            this.httpClient.postFormData(
+                '/categories',
+                formData,
+                data => this.responseCreateCategory(data)
             );
         });
 
@@ -258,6 +272,19 @@ export default class ModalEvents {
             }, 4000);
         } else {
             document.getElementById('modalCreateWarning').style.display = 'block';
+        }
+    }
+
+    responseCreateCategory(data) {
+        console.log('responseCreateCategory', data);
+        if (data.category) {
+            this.productSuccess.style.display = 'block';
+            bootstrap.Modal.getInstance(this.modalCreateCategory).hide();
+            setTimeout(() => {
+                this.productSuccess.style.display = 'none';
+            }, 4000);
+        } else {
+            document.getElementById('modalCreateCategoryWarning').style.display = 'block';
         }
     }
 

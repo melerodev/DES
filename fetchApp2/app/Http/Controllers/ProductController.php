@@ -32,11 +32,8 @@ class ProductController extends Controller {
             'name'  => 'required|unique:product|max:100|min:2',
             'price' => 'required|numeric|gte:0|lte:100000',
         ]);
-        // $validator->passes(), $validator->fails()
         if ($validator->passes()) {
             $message = '';
-            //$product = new Product($request->all());
-            //$result = $product->store();
             $result = Product::change($request);
             if($result) {
                 $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
@@ -96,14 +93,11 @@ class ProductController extends Controller {
         if($product != null) {
             try {
                 $result = $product->delete();
-                //$page = $request->query('page', 1);
-                //$products = Product::orderBy('name')->paginate(10, ['*'], 'page', $page)->setPath(url('product'));
                 $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
                 if($products->isEmpty()) {
-                    $page = $products->lastPage();//$page - 1;
+                    $page = $products->lastPage();
                     $request->merge(['page' => $page]);
                     $products = Product::orderBy('name')->paginate(10)->setPath(url('product'));
-                    //$products = Product::orderBy('name')->paginate(10, ['*'], 'page', $page)->setPath(url('product'));
                 }
             } catch(\Exception $e) {
                 $message = $e->getMessage();

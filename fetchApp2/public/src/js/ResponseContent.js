@@ -32,13 +32,24 @@ export default class ResponseContent {
 
         const buttonCreate = document.createElement('button');
         buttonCreate.textContent = 'Create';
-        buttonCreate.style.margin = '0 0 10px';
+        // un margen a la derecha y otro abajo
+        buttonCreate.style.margin = '5px 5px 5px';
         buttonCreate.setAttribute('data-bs-toggle', 'modal');
         buttonCreate.setAttribute('data-bs-target', '#createModal');
         buttonCreate.classList.add('btn', 'btn-success');
         buttonCreate.dataset.url = "/song";
         buttonCreate.dataset.method = "post";
         this.content.appendChild(buttonCreate);
+
+        const buttonCreateCategory = document.createElement('button');
+        buttonCreateCategory.textContent = 'Create Category';
+        buttonCreate.style.margin = '5px 5px 5px';
+        buttonCreateCategory.setAttribute('data-bs-toggle', 'modal');
+        buttonCreateCategory.setAttribute('data-bs-target', '#createCategoryModal');
+        buttonCreateCategory.classList.add('btn', 'btn-warning');
+        buttonCreateCategory.dataset.url = "/category";
+        buttonCreateCategory.dataset.method = "post";
+        this.content.appendChild(buttonCreateCategory);
 
         result.songs.links.forEach(link => {
             this.pageItem.add(link, (data) => {
